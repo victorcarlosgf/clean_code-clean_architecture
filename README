@@ -1,0 +1,22 @@
+Criar projeto typescript
+
+npm init -y
+npm install typescript jest @types/jest ts-node ts-jest
+npm i typescript -D (instalar como devDependencies)
+npx tsc --init (cria arquivo tsconfig.json)
+
+npx ts-jest config:init
+
+Configurar banco de dados
+npm i -D prisma
+npx prisma init --datasource-provider SQLite
+npx prisma migrate dev
+npx prisma studio
+
+npm i @prisma/client
+
+Rodar projeto
+npm run dev
+
+Rodar testes
+npm run test
