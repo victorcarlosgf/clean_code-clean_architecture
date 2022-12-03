@@ -1,30 +1,26 @@
-import ExpressAdapter from './adapters/express.adapter';
+import ExpressAdapter from './infra/api/express.adapter';
 
-import HealthcheckController from './controllers/healthcheck.ctrl';
-import ClientController from './controllers/client.ctrl';
-import ProductController from './controllers/product.ctrl';
-import OrderController from './controllers/order.ctrl';
+import HealthcheckController from './adapters/controllers/healthcheck.ctrl';
+import CustomerController from './adapters/controllers/customer.ctrl';
+import ProductController from './adapters/controllers/product.ctrl';
+import OrderController from './adapters/controllers/order.ctrl';
 
-import CreateClient from './use-case/client/create-client/create-client';
-import CreateProduct from './use-case/product/create-product/create-product';
-import CreateOrder from './use-case/order/create-order/create-order';
+import CreateCustomer from './application/use-case/customer/create-customer/create-customer.usecase';
+import CreateProduct from './application/use-case/product/create-product/create-product.usecase';
+import CreateOrder from './application/use-case/order/create-order/create-order.usecase';
 
-import ClientRepository from './infra/repository/client.rep';
-import ProductRepository from './infra/repository/product.rep';
-import OrderRepository from './infra/repository/order.rep';
+import DBRepositoryFactory from './infra/db/repository/repository-factory';
 
 const httpServer = new ExpressAdapter()
 
-const clientRepository = new ClientRepository();
-const productRepository = new ProductRepository();
-const orderRepository = new OrderRepository
+const repositoryFactory = new DBRepositoryFactory();
 
-const createClient = new CreateClient(clientRepository);
-const createProduct = new CreateProduct(productRepository);
-const createOrder = new CreateOrder(clientRepository, productRepository, orderRepository);
+const createClient = new CreateCustomer(repositoryFactory);
+const createProduct = new CreateProduct(repositoryFactory);
+const createOrder = new CreateOrder(repositoryFactory);
 
 new HealthcheckController(httpServer);
-new ClientController(httpServer, createClient);
+new CustomerController(httpServer, createClient);
 new ProductController(httpServer, createProduct);
 new OrderController(httpServer, createOrder);
 

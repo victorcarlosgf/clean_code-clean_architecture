@@ -1,16 +1,28 @@
-import Product from "../src/entities/product.entity";
-import CreateProduct from "../src/use-case/product/create-product/create-product";
+import CreateProduct from "../src/application/use-case/product/create-product/create-product.usecase";
+import DBRepositoryFactory from "../src/infra/db/repository/repository-factory";
 
-test('Deve criar produto', async () => {
-  const productInput = {
-    description: 'Tenis adidas',
-    value: 30,
-  };
+const productInput: any = {
+  name: "Tenis nike",
+  description: "Tenis nike 39",
+  volume: 20,
+  density: 3,
+  value: 50
+};
 
-  const product = new Product(productInput.description, productInput.value);
+describe('CreateProduct', () => {
+  test('Deve criar produto', async () => {
+    const repositoryFactory = new DBRepositoryFactory();
+    const createProduct = new CreateProduct(repositoryFactory);
+    const response = await createProduct.execute(productInput);
+    expect(response.status).toBe(201);
+  });
 
-  const createProduct = new CreateProduct();
-  const response = await createProduct.execute(productInput);
-  expect(response.data).toStrictEqual(product);
-  expect(response.status).toBe(201);
-});
+  test('Não deve criar produto sem descrição', async () => {
+    delete productInput.description;
+    const repositoryFactory = new DBRepositoryFactory()
+    const createProduct = new CreateProduct(repositoryFactory);
+    expect(() => createProduct.execute(productInput))
+      .rejects
+      .toThrow(new Error('Undefined description'));
+  });
+})

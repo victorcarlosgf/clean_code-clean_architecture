@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
+model Customer {
   id        String   @id @default(uuid())
   name      String
   document  String
@@ -21,18 +21,53 @@ model Client {
 
 model Product {
   id          String   @id @default(uuid())
+  name        String
   description String
+  volume      Int
+  density     Int
   value       Int
   createdAt   DateTime @default(now())
+
+  item Item[]
+}
+
+model Item {
+  id        String  @id @default(uuid())
+  productId String
+  orderId   String?
+  quantity  Int
+
+  product Product @relation(fields: [productId], references: [id])
+  order   Order?  @relation(fields: [orderId], references: [id])
+}
+
+model Order {
+  id         String  @id @default(uuid())
+  customerId String
+  items      Item[]
+  shippingId String?
+  couponId   String?
+
+  customer Customer  @relation(fields: [customerId], references: [id])
+  shipping Shipping? @relation(fields: [shippingId], references: [id])
+  coupon   Coupon?   @relation(fields: [couponId], references: [id])
+}
+
+model Shipping {
+  id        String   @id @default(uuid())
+  distance  Int
+  volume    Int
+  density   Int
+  value     Int
+  createdAt DateTime @default(now())
 
   order Order[]
 }
 
-model Order {
-  id        String @id @default(uuid())
-  clientId  String
-  productId String
+model Coupon {
+  id         String @id @default(uuid())
+  code       String
+  percentage Int
 
-  client  Client  @relation(fields: [clientId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  order Order[]
 }

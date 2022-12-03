@@ -1,0 +1,8 @@
+Padrões de criação
+
+- Factory: É um padrão que fornece uma interface para criar objetos em uma superclasse, mas permite que as subclasses alterem o tipo de objetos que serão criados.
+
+Padrões de comportamento
+
+- Strategy: É um padrão que permite definir uma família de algoritmos, colocar cada um deles em uma classe separada e tornar seus objetos intercambiáveis.
+- Chain of Responsability: É um padrão que permite passar solicitações ao longo de uma cadeia de manipuladores. Ao receber uma solicitação, cada manipulador decide processar a solicitação ou passá-la para o próximo manipulador na cadeia
