@@ -1,8 +1,8 @@
-import Product from "../../../domain/entities/product.entity";
-import IProductRepository from "../../../domain/repository/product.interface.rep";
+import IProductRepository from "../../../../../domain/repository/product.interface.rep";
+import Product from "../../../../../domain/entities/product.entity";
 import PrismaAdapter from "../prisma.adapter";
 
-export default class ProductRepository implements IProductRepository {
+export default class ProductDBRepository implements IProductRepository {
   connection: PrismaAdapter;
 
   constructor() {
@@ -26,18 +26,6 @@ export default class ProductRepository implements IProductRepository {
       {
         where: {
           id: productId
-        }
-      }
-    )
-  }
-
-  async findMany(products: string[]): Promise<any> {
-    return this.connection.prisma.product.findMany(
-      {
-        where: {
-          id: {
-            in: products
-          }
         }
       }
     )

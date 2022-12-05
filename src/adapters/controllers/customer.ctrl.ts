@@ -1,5 +1,5 @@
 import ICreateCustomer from "../../application/use-case/customer/create-customer/create-customer.interface";
-import IHttpServer from "../../infra/api/http-server";
+import IHttpServer from "../../infra/driver/api/http-server";
 
 
 export default class CustomerController {

@@ -8,6 +8,8 @@ import Customer from "../../../../domain/entities/customer.entity";
 import Product from "../../../../domain/entities/product.entity";
 import Order from "../../../../domain/entities/order.entity";
 import OrderItem from "../../../../domain/entities/order-item.entity";
+import ICurrencyGateway from "../../../../adapters/gateways/currency/currency.gateway.interface";
+import CurrencyRandomGateway from "../../../../adapters/gateways/currency/currency-random.gateway";
 
 export default class CreateOrder implements ICreateOrder {
   private customerRepository: ICustomerRepository;
@@ -15,7 +17,8 @@ export default class CreateOrder implements ICreateOrder {
   private orderRepository: IOrderRepository;
 
   constructor(
-    repositoryFactory: IRepositoryFactory
+    repositoryFactory: IRepositoryFactory,
+    readonly currencyGateway: ICurrencyGateway = new CurrencyRandomGateway(),
   ) {
     this.customerRepository = repositoryFactory.createCustomerRepository();
     this.productRepository = repositoryFactory.createProductRepository();
@@ -24,7 +27,7 @@ export default class CreateOrder implements ICreateOrder {
 
   async execute(orderInput: CreateOrderInput) {
     const customerFound = await this.customerRepository
-      .findUnique(orderInput.customerId);
+      .findByDocument(orderInput.customerDocument);
 
     if (!customerFound)
       throw new Error('Customer not found');
@@ -61,7 +64,7 @@ export default class CreateOrder implements ICreateOrder {
     const order = new Order(customer, orderItems);
 
     const orderSaved = await this.orderRepository
-      .save(orderInput.customerId, orderItems);
+      .save(order);
 
     // const orderSaved = {};
     const total = order.getTotal();

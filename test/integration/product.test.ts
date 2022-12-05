@@ -1,5 +1,5 @@
-import CreateProduct from "../src/application/use-case/product/create-product/create-product.usecase";
-import DBRepositoryFactory from "../src/infra/db/repository/repository-factory";
+import CreateProduct from "../../src/application/use-case/product/create-product/create-product.usecase";
+import DBRepositoryFactory from "../../src/infra/db/repository/repository-factory";
 
 const productInput: any = {
   name: "Tenis nike",

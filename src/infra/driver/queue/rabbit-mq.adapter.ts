@@ -1,11 +1,10 @@
-import IQueue from "./queue.interface";
+import IQueueConsumer from "./queue-consumer.interface";
 import amqp from "amqplib";
 
-export default class RabbitMQAdapter implements IQueue {
+export default class RabbitMQAdapter implements IQueueConsumer {
 	connection: any;
 
-	constructor () {
-	}
+	constructor() { }
 
 	async connect(): Promise<void> {
 		this.connection = await amqp.connect("amqp://localhost");
@@ -15,7 +14,7 @@ export default class RabbitMQAdapter implements IQueue {
 		await this.connection.close();
 	}
 
-	async on(exchangeName: string, queueName: string, callback: Function): Promise<void> {
+	async consume(exchangeName: string, queueName: string, callback: Function): Promise<void> {
 		const channel = await this.connection.createChannel();
 		await channel.assertExchange(exchangeName, "direct", { durable: true });
 		await channel.assertQueue(queueName, { durable: true });
@@ -25,11 +24,4 @@ export default class RabbitMQAdapter implements IQueue {
 			channel.ack(msg);
 		});
 	}
-
-	async publish(exchangeName: string, data: any): Promise<void> {
-		const channel = await this.connection.createChannel();
-		await channel.assertExchange(exchangeName, "direct", { durable: true });
-		channel.publish(exchangeName, "", Buffer.from(JSON.stringify(data)));
-	}
-
 }

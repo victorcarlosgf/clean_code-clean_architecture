@@ -1,4 +1,4 @@
-import IHttpServer from "../../infra/api/http-server";
+import IHttpServer from "../../infra/driver/api/http-server";
 
 export default class HealthcheckController {
 

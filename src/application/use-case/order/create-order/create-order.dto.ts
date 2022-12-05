@@ -1,5 +1,5 @@
 export type CreateOrderInput = {
-  customerId: string
+  customerDocument: string
   items: OrderItemInput[]
   couponId?: string
 }

@@ -28,40 +28,41 @@ model Product {
   value       Int
   createdAt   DateTime @default(now())
 
-  item Item[]
+  item OrderItem[]
 }
 
-model Item {
+model OrderItem {
   id        String  @id @default(uuid())
   productId String
-  orderId   String?
   quantity  Int
+  total     Int
+  orderId   String?
 
   product Product @relation(fields: [productId], references: [id])
   order   Order?  @relation(fields: [orderId], references: [id])
 }
 
 model Order {
-  id         String  @id @default(uuid())
+  id         String      @id @default(uuid())
   customerId String
-  items      Item[]
-  shippingId String?
+  items      OrderItem[]
+  freightId  String?
   couponId   String?
+  total      Int
 
-  customer Customer  @relation(fields: [customerId], references: [id])
-  shipping Shipping? @relation(fields: [shippingId], references: [id])
-  coupon   Coupon?   @relation(fields: [couponId], references: [id])
+  customer Customer @relation(fields: [customerId], references: [id])
+  freight  Freight? @relation(fields: [freightId], references: [id])
+  coupon   Coupon?  @relation(fields: [couponId], references: [id])
 }
 
-model Shipping {
+model Freight {
   id        String   @id @default(uuid())
   distance  Int
   volume    Int
   density   Int
   value     Int
   createdAt DateTime @default(now())
-
-  order Order[]
+  Order     Order[]
 }
 
 model Coupon {

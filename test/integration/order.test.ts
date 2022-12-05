@@ -1,8 +1,9 @@
-import CreateOrder from "../src/application/use-case/order/create-order/create-order.usecase";
-import { CreateOrderInput } from "../src/application/use-case/order/create-order/create-order.dto";
-import DBRepositoryFactory from "../src/infra/db/repository/repository-factory";
-import ProductRepository from "../src/infra/db/repository/product.rep";
-import CustomerRepository from "../src/infra/db/repository/customer.rep";
+import CreateOrder from "../../src/application/use-case/order/create-order/create-order.usecase";
+import { CreateOrderInput } from "../../src/application/use-case/order/create-order/create-order.dto";
+import DBRepositoryFactory from "../../src/infra/db/repository/repository-factory";
+import ProductRepository from "../../src/infra/db/repository/product.rep";
+import CustomerRepository from "../../src/infra/db/repository/customer.rep";
+import ICustomerRepository from "../../src/domain/repository/customer.interface.rep";
 
 const customerIdInput = '0418c364-91cd-4ddf-af47-fadcba998496';
 
@@ -79,15 +80,22 @@ describe('Create Order', () => {
 
   test("Não deve fazer um pedido com cpf inválido", async () => {
 
-    const customer = {
-      id: '0418c364-91cd-4ddf-af47-fadcba998496',
-      name: "Victor Freitas",
-      document: "67192650160",
-      createdAt: "2022-11-24T18:27:08.087Z"
-    };
+    const customerRepository: ICustomerRepository = {
+      async findUnique(customerId: string): Promise<any> {
+        const customer = {
+          id: '0418c364-91cd-4ddf-af47-fadcba998496',
+          name: "Victor Freitas",
+          document: "67192650160",
+          createdAt: "2022-11-24T18:27:08.087Z"
+        };
+
+        return customer;
+      },
+      async save() { }
+    }
 
     jest.spyOn(customerRepository, 'findUnique').mockImplementation(() =>
-      Promise.resolve(customer));
+      Promise.resolve(customerRepository));
 
     await expect(async () => await createOrder.execute(createOrderInput))
       .rejects

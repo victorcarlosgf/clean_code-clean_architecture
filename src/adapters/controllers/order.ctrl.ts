@@ -1,6 +1,6 @@
 import { CreateOrderInput, OrderItemInput } from "../../application/use-case/order/create-order/create-order.dto";
 import ICreateOrder from "../../application/use-case/order/create-order/create-order.interface";
-import IHttpServer from "../../infra/api/http-server";
+import IHttpServer from "../../infra/driver/api/http-server";
 
 export default class OrderController {
 
@@ -20,7 +20,7 @@ export default class OrderController {
       });
 
       const createOrderInput: CreateOrderInput = {
-        customerId: body.customer_id,
+        customerDocument: body.customer_document,
         items: orderItems
       }
 
