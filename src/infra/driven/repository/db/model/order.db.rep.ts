@@ -13,8 +13,35 @@ export default class OrderDBRepository implements IOrderRepository {
     return this.connection.prisma.order.create({
       data: {
         customerId: order.customer.id,
-        items: order.orderItems
+        code: order.generateCode(1),
+        total: order.getTotal()
       }
     })
+  }
+
+  async findByCode(orderCode: string): Promise<any> {
+    return this.connection.prisma.order.findFirst(
+      {
+        where: {
+          code: orderCode
+        },
+        orderBy: {
+          id: "desc"
+        }
+      }
+    )
+  }
+
+  async findByDocument(customerDocument: string): Promise<any> {
+    return this.connection.prisma.order.findMany(
+      {
+        where: {
+          document: customerDocument
+        },
+        orderBy: {
+          id: "desc"
+        }
+      }
+    )
   }
 }

@@ -1,6 +1,4 @@
 import ICreateOrder from "./create-order.interface";
-import { CreateOrderInput, OrderItemInput } from "./create-order.dto";
-import IRepositoryFactory from "../../../../domain/repository/repository-factory.interface";
 import ICustomerRepository from "../../../../domain/repository/customer.interface.rep";
 import IProductRepository from "../../../../domain/repository/product.interface.rep";
 import IOrderRepository from "../../../../domain/repository/order.interface.rep";
@@ -10,24 +8,20 @@ import Order from "../../../../domain/entities/order.entity";
 import OrderItem from "../../../../domain/entities/order-item.entity";
 import ICurrencyGateway from "../../../../adapters/gateways/currency/currency.gateway.interface";
 import CurrencyRandomGateway from "../../../../adapters/gateways/currency/currency-random.gateway";
+import { CreateOrderInput } from "./create-order.dto";
 
 export default class CreateOrder implements ICreateOrder {
-  private customerRepository: ICustomerRepository;
-  private productRepository: IProductRepository;
-  private orderRepository: IOrderRepository;
 
   constructor(
-    repositoryFactory: IRepositoryFactory,
+    readonly customerRepository: ICustomerRepository,
+    readonly productRepository: IProductRepository,
+    readonly orderRepository: IOrderRepository,
     readonly currencyGateway: ICurrencyGateway = new CurrencyRandomGateway(),
-  ) {
-    this.customerRepository = repositoryFactory.createCustomerRepository();
-    this.productRepository = repositoryFactory.createProductRepository();
-    this.orderRepository = repositoryFactory.createOrderRepository();
-  }
+  ) { }
 
-  async execute(orderInput: CreateOrderInput) {
+  async execute(createOrderInput: CreateOrderInput) {
     const customerFound = await this.customerRepository
-      .findByDocument(orderInput.customerDocument);
+      .findByDocument(createOrderInput.customerDocument);
 
     if (!customerFound)
       throw new Error('Customer not found');
@@ -35,14 +29,15 @@ export default class CreateOrder implements ICreateOrder {
     const customer = new Customer(
       customerFound.name,
       customerFound.document,
+      customerFound.email,
       customerFound.id,
     );
 
     let orderItems: OrderItem[] = [];
 
-    await Promise.all(orderInput.items.map(async (item: OrderItemInput) => {
+    for (const orderItemInput of createOrderInput.items) {
       const productFound = await this.productRepository
-        .findUnique(item.productId);
+        .findByName(orderItemInput.productName);
 
       if (!productFound) {
         throw new Error('Product not found');
@@ -51,22 +46,31 @@ export default class CreateOrder implements ICreateOrder {
       const product = new Product(
         productFound.name,
         productFound.description,
-        productFound.volume,
-        productFound.density,
+        {
+          width: productFound.width,
+          height: productFound.height,
+          length: productFound.length
+        },
+        productFound.weight,
         productFound.value,
+        productFound.currency,
+        undefined,
         productFound.id,
       );
 
-      const orderItem = new OrderItem(product, item.quantity);
+      const orderItem = new OrderItem(product, orderItemInput.quantity);
       orderItems.push(orderItem);
-    }));
+    };
+
+    if (createOrderInput.couponCode) {
+      console.log(createOrderInput.couponCode);
+    }
 
     const order = new Order(customer, orderItems);
 
     const orderSaved = await this.orderRepository
       .save(order);
 
-    // const orderSaved = {};
     const total = order.getTotal();
 
     return {

@@ -13,7 +13,8 @@ export default class CustomerDBRepository implements ICustomerRepository {
     return this.connection.prisma.customer.create({
       data: {
         name: customer.name,
-        document: customer.document
+        document: customer.document,
+        email: customer.email,
       }
     })
   }

@@ -1,4 +1,5 @@
-import ICreateCustomer from "../../application/use-case/customer/create-customer/create-customer.interface";
+import { CreateCustomerInput } from "../../application/use-cases/customer/create-customer/create-customer.dto";
+import ICreateCustomer from "../../application/use-cases/customer/create-customer/create-customer.interface";
 import IHttpServer from "../../infra/driver/api/http-server";
 
 
@@ -9,9 +10,10 @@ export default class CustomerController {
     readonly createClient: ICreateCustomer
   ) {
     httpServer.register("post", "/customer", async (params: any, body: any) => {
-      const createCustomerInput = {
+      const createCustomerInput: CreateCustomerInput = {
         name: body.name,
         document: body.document,
+        email: body.email
       };
 
       return createClient.execute(createCustomerInput);

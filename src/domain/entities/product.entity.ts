@@ -1,10 +1,18 @@
+export type Dimension = {
+  width: number
+  height: number
+  length: number
+}
+
 export default class Product {
   constructor(
     readonly name: string,
     readonly description: string,
-    readonly volume: number,
-    readonly density: number,
+    readonly dimension: Dimension,
+    readonly weight: number,
     readonly value: number,
+    readonly currency: string = "BRL",
+    readonly currencyValue: number = 1,
     readonly id?: string,
   ) {
     this.validateFields()
@@ -17,13 +25,17 @@ export default class Product {
     if (!this.description)
       throw new Error('Undefined description');
 
-    if (!this.volume)
-      throw new Error('Undefined volume');
+    if (!this.dimension)
+      throw new Error('Undefined dimension');
 
-    if (!this.density)
-      throw new Error('Undefined density');
+    if (!this.weight)
+      throw new Error('Undefined weight');
 
     if (!this.value)
       throw new Error('Undefined value');
+  }
+
+  getTotal() {
+    return this.value * this.currencyValue;
   }
 }

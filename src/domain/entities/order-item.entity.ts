@@ -5,9 +5,11 @@ export default class OrderItem {
     readonly product: Product,
     readonly quantity: number,
     readonly id?: string,
-  ) { }
+  ) {
+    if (quantity <= 0) throw new Error("Quantity must be positive");
+  }
 
   getTotal() {
-    return this.product.value * this.quantity;
+    return this.product.getTotal() * this.quantity;
   }
 }

@@ -1,11 +1,11 @@
 export type CreateOrderInput = {
   customerDocument: string
-  items: OrderItemInput[]
-  couponId?: string
+  items: CreateOrderItemInput[]
+  couponCode?: string
 }
 
-export type OrderItemInput = {
-  productId: string
+export type CreateOrderItemInput = {
+  productName: string
   quantity: number
 }
 

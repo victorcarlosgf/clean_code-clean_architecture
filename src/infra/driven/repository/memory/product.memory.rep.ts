@@ -13,8 +13,8 @@ export default class ProductMemoryRepository implements IProductRepository {
     return this.products;
   }
 
-  async findUnique(productId: string): Promise<any> {
-    const product = this.products.find(product => product.id === productId);
+  async findByName(productName: string): Promise<any> {
+    const product = this.products.find(product => product.name === productName);
     if (!product)
       throw new Error("Product not found");
     return product;

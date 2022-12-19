@@ -14,18 +14,24 @@ export default class ProductDBRepository implements IProductRepository {
       data: {
         name: product.name,
         description: product.description,
-        volume: product.volume,
-        density: product.density,
-        value: product.value
+        width: product.dimension.width,
+        height: product.dimension.height,
+        length: product.dimension.length,
+        weight: product.weight,
+        value: product.value,
+        currency: product.currency,
       }
     })
   }
 
-  async findUnique(productId: string): Promise<any> {
-    return this.connection.prisma.product.findUnique(
+  async findByName(productName: string): Promise<any> {
+    return this.connection.prisma.product.findFirst(
       {
         where: {
-          id: productId
+          name: productName
+        },
+        orderBy: {
+          id: "desc"
         }
       }
     )

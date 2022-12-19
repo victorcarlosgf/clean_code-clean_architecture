@@ -8,6 +8,15 @@ export default class Order {
     readonly id?: string,
   ) { }
 
+  generateCode(sequence: number) {
+    if (sequence < 0)
+      throw new Error("Invalid sequence");
+
+    const date = new Date();
+    const year = date.getFullYear();
+    return `${year}${new String(sequence).padStart(8, "0")}`;
+  }
+
   getTotal() {
     let total = 0;
     for (const orderItem of this.orderItems) {
