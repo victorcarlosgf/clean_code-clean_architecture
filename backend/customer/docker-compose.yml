@@ -7,4 +7,4 @@ services: ## Define um serviço
     ports:
       - "3000:80" ## redirecionamento de porta quando chegar alguma requisição na porta 3000 chama o container na porta 80
     volumes:
-      - .:/usr/app ## monitoro a pasta atual . e envio as alterações para /usr/app
+      - .:/app ## monitoro a pasta atual . e envio as alterações para /usr/app

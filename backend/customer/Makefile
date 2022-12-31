@@ -1,24 +1,34 @@
+.PHONY: build up down start stop restart logs login setup test
+
 DOCKER_USERNAME ?= victor
 IMAGE_NAME ?= dockernode
-APPLICATION_NAME ?= customer_customer_1
+APPLICATION_NAME ?= customer
 
 build:
-	docker build -t ${DOCKER_USERNAME}/${IMAGE_NAME} .
+	docker-compose build
 
 up:
-	docker run -p 3000:80 -d --name ${APPLICATION_NAME} ${DOCKER_USERNAME}/${IMAGE_NAME}
+	docker-compose up -d
 
-stop:
-	docker stop ${APPLICATION_NAME}
+down:
+	docker-compose down
 
 start:
-	docker start ${APPLICATION_NAME}
+	docker-compose start
 
-login:
-	docker exec -it ${APPLICATION_NAME} sh
+stop:
+	docker-compose stop
+
+restart: down up
 
 logs:
-	docker logs ${APPLICATION_NAME}
+	docker-compose logs --tail=100 -f
 
-compose:
-	docker-compose up -d
+login:
+	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash
+
+setup:
+	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash -c "npm run setup"
+	
+test:
+	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash -c "npm run test"
