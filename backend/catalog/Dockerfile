@@ -2,7 +2,7 @@
 ## Baixa a imagem do node com versão alpine (versão mais simplificada e leve)
 FROM node:alpine
 
-ENV PATH="/application/node_modules/.bin:${PATH}"
+ENV PATH="/app/node_modules/.bin:${PATH}"
 
 ## Define o local onde o app vai ficar no disco do container
 ## Pode ser o diretório que você quiser

@@ -1,5 +1,5 @@
-import { CreateProductInput } from "./create-product.dto";
+import { CreateProductInput } from './create-product.dto';
 
 export default interface ICreateProduct {
-  execute(productInput: CreateProductInput): Promise<any>
+  execute(productInput: CreateProductInput): Promise<any>;
 }

@@ -2,7 +2,7 @@ export type Dimension = {
   width: number
   height: number
   length: number
-}
+};
 
 export default class Product {
   constructor(
@@ -12,10 +12,10 @@ export default class Product {
     readonly dimension: Dimension,
     readonly weight: number,
     readonly value: number,
-    readonly currency: string = "BRL",
+    readonly currency: string = 'BRL',
     readonly currencyValue: number = 1,
   ) {
-    this.validateFields()
+    this.validateFields();
   }
 
   validateFields() {

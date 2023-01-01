@@ -1,4 +1,4 @@
-import Product from "../entities/product.entity";
+import Product from '../entities/product.entity';
 
 export default interface IProductRepository {
   save(product: Product): Promise<any>;

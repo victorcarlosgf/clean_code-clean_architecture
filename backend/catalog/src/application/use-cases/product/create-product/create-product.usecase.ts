@@ -1,7 +1,7 @@
-import ICreateProduct from "./create-product.interface";
-import { CreateProductInput } from "./create-product.dto";
-import Product from "../../../../domain/entities/product.entity";
-import IProductRepository from "../../../../domain/repository/product.interface.rep";
+import ICreateProduct from './create-product.interface';
+import { CreateProductInput } from './create-product.dto';
+import Product from '../../../../domain/entities/product.entity';
+import IProductRepository from '../../../../domain/repository/product.interface.rep';
 
 export default class CreateProduct implements ICreateProduct {
   constructor(readonly productRepository: IProductRepository) { }
@@ -16,12 +16,11 @@ export default class CreateProduct implements ICreateProduct {
       productInput.value
     );
 
-    const productSaved = await this.productRepository
-      .save(product);
+    const productSaved = await this.productRepository.save(product);
 
     return {
       data: productSaved,
-      status: 201
+      status: 201,
     };
   }
 }

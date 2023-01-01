@@ -1,6 +1,6 @@
-import IProductRepository from "../../../../../domain/repository/product.interface.rep";
-import Product from "../../../../../domain/entities/product.entity";
-import PrismaAdapter from "../prisma.adapter";
+import IProductRepository from '../../../../../domain/repository/product.interface.rep';
+import Product from '../../../../../domain/entities/product.entity';
+import PrismaAdapter from '../prisma.adapter';
 
 export default class ProductDBRepository implements IProductRepository {
   connection: PrismaAdapter;
@@ -20,37 +20,31 @@ export default class ProductDBRepository implements IProductRepository {
         weight: product.weight,
         value: product.value,
         currency: product.currency,
-      }
-    })
+      },
+    });
   }
 
   async findByName(productName: string): Promise<any> {
-    const productfound = await this.connection.prisma.product.findFirst(
-      {
-        where: {
-          name: productName
-        },
-        orderBy: {
-          id: "desc"
-        }
-      }
-    )
-    console.log(this.toEntity(productfound))
+    const productfound = await this.connection.prisma.product.findFirst({
+      where: {
+        name: productName,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+    });
     return productfound;
   }
 
   async findAll(): Promise<any> {
-    return this.connection.prisma.product.findMany(
-      {
-        orderBy: {
-          id: "desc"
-        }
-      }
-    )
+    return this.connection.prisma.product.findMany({
+      orderBy: {
+        id: 'desc',
+      },
+    });
   }
 
   private toEntity(model: any): any {
-    console.log('MODELLL');
     console.log(model);
   }
 }

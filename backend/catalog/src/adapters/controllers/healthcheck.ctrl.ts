@@ -1,14 +1,11 @@
-import IHttpServer from "../../infra/driver/api/http-server";
+import IHttpServer from '../../infra/driver/api/http-server';
 
 export default class HealthcheckController {
-
-  constructor(
-    readonly httpServer: IHttpServer,
-  ) {
-    httpServer.on("get", "/healthcheck", async (params: any, body: any) => {
+  constructor(readonly httpServer: IHttpServer) {
+    httpServer.on('get', '/healthcheck', async () => {
       return {
         data: 'OK',
-        status: 200
+        status: 200,
       };
     });
   }

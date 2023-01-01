@@ -1,5 +1,5 @@
-import IProductRepository from "../../../../domain/repository/product.interface.rep";
-import Product from "../../../../domain/entities/product.entity";
+import IProductRepository from '../../../../domain/repository/product.interface.rep';
+import Product from '../../../../domain/entities/product.entity';
 
 export default class ProductMemoryRepository implements IProductRepository {
   private products: Product[];
@@ -16,7 +16,11 @@ export default class ProductMemoryRepository implements IProductRepository {
   async findByName(productName: string): Promise<any> {
     const product = this.products.find(product => product.name === productName);
     if (!product)
-      throw new Error("Product not found");
+      throw new Error('Product not found');
     return product;
+  }
+
+  async findAll(): Promise<Product[]> {
+    return Promise.resolve(this.products);
   }
 }

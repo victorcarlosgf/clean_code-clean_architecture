@@ -1,13 +1,11 @@
-import IQueueProducer from "./queue-producer.interface";
-import amqp from "amqplib";
+import IQueueProducer from './queue-producer.interface';
+import amqp from 'amqplib';
 
 export default class RabbitMQAdapter implements IQueueProducer {
   connection: any;
 
-  constructor() { }
-
   async connect(): Promise<void> {
-    this.connection = await amqp.connect("amqp://localhost");
+    this.connection = await amqp.connect('amqp://localhost');
   }
 
   async close(): Promise<void> {
@@ -16,7 +14,7 @@ export default class RabbitMQAdapter implements IQueueProducer {
 
   async publish(exchangeName: string, data: any): Promise<void> {
     const channel = await this.connection.createChannel();
-    await channel.assertExchange(exchangeName, "direct", { durable: true });
-    channel.publish(exchangeName, "", Buffer.from(JSON.stringify(data)));
+    await channel.assertExchange(exchangeName, 'direct', { durable: true });
+    channel.publish(exchangeName, '', Buffer.from(JSON.stringify(data)));
   }
 }

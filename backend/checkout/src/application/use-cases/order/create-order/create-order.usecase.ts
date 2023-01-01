@@ -10,66 +10,62 @@ import ICatalogGateway from "../../../../adapters/gateways/catalog/catalog.gatew
 import IFreightGateway from "../../../../adapters/gateways/freight/freight.gateway.interface";
 
 export default class CreateOrder implements ICreateOrder {
-
   constructor(
     readonly orderRepository: IOrderRepository,
     readonly customerGateway: ICustomerGateway,
     readonly catalogGateway: ICatalogGateway,
     readonly freightGateway: IFreightGateway,
-    readonly currencyGateway: ICurrencyGateway = new CurrencyRandomGateway(),
-  ) { }
+    readonly currencyGateway: ICurrencyGateway = new CurrencyRandomGateway()
+  ) {}
 
-  async execute(createOrderInput: CreateOrderInput): Promise<CreateOrderOutput> {
-    const customer = await this.customerGateway
-      .getCustomer(createOrderInput.customerDocument);
+  async execute(
+    createOrderInput: CreateOrderInput
+  ): Promise<CreateOrderOutput> {
+    const customer = await this.customerGateway.getCustomer(
+      createOrderInput.customerDocument
+    );
 
-    if (!customer)
-      throw new Error('Customer not found');
+    if (!customer) throw new Error("Customer not found");
 
     const order = new Order(customer);
 
-    console.log(createOrderInput);
-
     for (const orderItemInput of createOrderInput.items) {
-      console.log('chegaaa auiiiiii');
-      const product = await this.catalogGateway
-      .getProduct(orderItemInput.productName);
-      console.log('chegaaa 22', product);
-
-      console.log(product);
+      const product = await this.catalogGateway.getProduct(
+        orderItemInput.productName
+      );
 
       if (!product) {
-        throw new Error('Product not found');
+        throw new Error("Product not found");
       }
 
       const orderItem = new OrderItem(product, orderItemInput.quantity);
 
-      console.log('chegaaa auiiiiii');
       order.addItem(orderItem);
-    };
-
-    console.log(order);
+    }
 
     if (createOrderInput.couponCode) {
       console.log(createOrderInput.couponCode);
     }
 
-    const freight = await this.freightGateway
-      .calculateFreight(order.getVolume(), order.getDensity(), createOrderInput.from, createOrderInput.to);
+    const freight = await this.freightGateway.calculateFreight(
+      order.getVolume(),
+      order.getDensity(),
+      createOrderInput.from,
+      createOrderInput.to
+    );
 
     order.setFreight(freight);
 
-    const orderSaved = await this.orderRepository
-      .save(order);
+    const orderSaved = await this.orderRepository.save(order);
 
     const total = order.getTotal();
 
     return {
       data: {
         ...orderSaved,
-        total
+        total,
       },
-      status: 201
+      status: 201,
     };
   }
 }

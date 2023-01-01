@@ -26,5 +26,3 @@ new HealthcheckController(httpServer);
 new ProductController(httpServer, createProduct, getProduct, getProducts);
 
 httpServer.listen(80);
-
-
