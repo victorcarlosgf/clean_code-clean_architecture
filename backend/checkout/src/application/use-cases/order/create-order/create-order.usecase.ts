@@ -1,13 +1,13 @@
-import ICreateOrder from "./create-order.interface";
-import IOrderRepository from "../../../../domain/repository/order.interface.rep";
-import Order from "../../../../domain/entities/order.entity";
-import OrderItem from "../../../../domain/entities/order-item.entity";
-import ICurrencyGateway from "../../../../adapters/gateways/currency/currency.gateway.interface";
-import CurrencyRandomGateway from "../../../../adapters/gateways/currency/currency-random.gateway";
-import { CreateOrderInput, CreateOrderOutput } from "./create-order.dto";
-import ICustomerGateway from "../../../../adapters/gateways/customer/customer.gateway.interface";
-import ICatalogGateway from "../../../../adapters/gateways/catalog/catalog.gateway.interface";
-import IFreightGateway from "../../../../adapters/gateways/freight/freight.gateway.interface";
+import ICreateOrder from './create-order.interface';
+import IOrderRepository from '../../../../domain/repository/order.interface.rep';
+import Order from '../../../../domain/entities/order.entity';
+import OrderItem from '../../../../domain/entities/order-item.entity';
+import ICurrencyGateway from '../../../../adapters/gateways/currency/currency.gateway.interface';
+import CurrencyRandomGateway from '../../../../adapters/gateways/currency/currency-random.gateway';
+import { CreateOrderInput, CreateOrderOutput } from './create-order.dto';
+import ICustomerGateway from '../../../../adapters/gateways/customer/customer.gateway.interface';
+import ICatalogGateway from '../../../../adapters/gateways/catalog/catalog.gateway.interface';
+import IFreightGateway from '../../../../adapters/gateways/freight/freight.gateway.interface';
 
 export default class CreateOrder implements ICreateOrder {
   constructor(
@@ -16,7 +16,7 @@ export default class CreateOrder implements ICreateOrder {
     readonly catalogGateway: ICatalogGateway,
     readonly freightGateway: IFreightGateway,
     readonly currencyGateway: ICurrencyGateway = new CurrencyRandomGateway()
-  ) {}
+  ) { }
 
   async execute(
     createOrderInput: CreateOrderInput
@@ -25,7 +25,7 @@ export default class CreateOrder implements ICreateOrder {
       createOrderInput.customerDocument
     );
 
-    if (!customer) throw new Error("Customer not found");
+    if (!customer) throw new Error('Customer not found');
 
     const order = new Order(customer);
 
@@ -35,7 +35,7 @@ export default class CreateOrder implements ICreateOrder {
       );
 
       if (!product) {
-        throw new Error("Product not found");
+        throw new Error('Product not found');
       }
 
       const orderItem = new OrderItem(product, orderItemInput.quantity);

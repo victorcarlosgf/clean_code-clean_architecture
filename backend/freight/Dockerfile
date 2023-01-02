@@ -2,7 +2,7 @@
 ## Baixa a imagem do node com versão alpine (versão mais simplificada e leve)
 FROM node:alpine
 
-ENV PATH="/application/node_modules/.bin:${PATH}"
+ENV PATH="/app/node_modules/.bin:${PATH}"
 
 ## Define o local onde o app vai ficar no disco do container
 ## Pode ser o diretório que você quiser
@@ -28,4 +28,4 @@ EXPOSE 80
 
 ## Não se repete no Dockerfile
 ## Executa o comando npm start para iniciar o script que está no package.json
-CMD npx prisma generate && npm run dev
+CMD npx prisma generate && npx husky install && npx husky add .husky/pre-commit "eslint --ext src --fix"

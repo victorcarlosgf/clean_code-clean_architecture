@@ -3,28 +3,31 @@ import Customer from './customer.entity';
 import OrderItem from './order-item.entity';
 
 export default class Order {
-  private orderItems: OrderItem[]
-  private freight: number
-  private coupon?: Coupon
+  private code: string;
+  private orderItems: OrderItem[];
+  private freight: number;
+  private coupon?: Coupon;
   constructor(
     readonly customer: Customer,
     readonly id?: string,
   ) {
+    this.code = '';
     this.orderItems = [];
     this.freight = 0;
   }
 
   generateCode(sequence: number) {
     if (sequence < 0)
-      throw new Error("Invalid sequence");
+      throw new Error('Invalid sequence');
 
     const date = new Date();
     const year = date.getFullYear();
-    return `${year}${new String(sequence).padStart(8, "0")}`;
+    this.code = `${year}${new String(sequence).padStart(8, '0')}`;
+    return this.code;
   }
 
   addItem(orderItem: OrderItem) {
-    if (this.orderItems.some((item) => item.product.id === orderItem.product.id)) throw new Error("Duplicated product");
+    if (this.orderItems.some((item) => item.product.id === orderItem.product.id)) throw new Error('Duplicated product');
     this.orderItems.push(orderItem);
   }
 
@@ -32,6 +35,10 @@ export default class Order {
     if (!coupon.isExpired()) {
       this.coupon = coupon;
     }
+  }
+
+  getCode(): string {
+    return this.code;
   }
 
   getVolume(): number {
@@ -60,9 +67,9 @@ export default class Order {
       total += orderItem.getTotal();
     }
     if (this.coupon) {
-			total -= this.coupon.getDiscount(total);
-		}
-		total += this.freight;
+      total -= this.coupon.getDiscount(total);
+    }
+    total += this.freight;
     return total;
   }
 }

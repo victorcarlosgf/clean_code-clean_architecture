@@ -21,6 +21,6 @@ export default class ProductMemoryRepository implements IProductRepository {
   }
 
   async findAll(): Promise<Product[]> {
-    return Promise.resolve(this.products);
+    return this.products;
   }
 }

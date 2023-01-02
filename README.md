@@ -56,7 +56,12 @@ npm i @prisma/client
 `make compose`
 
 #### Executar projeto com Docker
-`npm run dev`
+`make up logs`
+
+* Customer: 3000
+* Catalog: 3001
+* Checkout: 3002
+* Freight: 3003
 
 #### Rodar testes
-`npm run test`
+`make test`
