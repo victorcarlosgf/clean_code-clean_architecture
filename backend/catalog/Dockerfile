@@ -1,4 +1,3 @@
-## Comando obrigatório
 ## Baixa a imagem do node com versão alpine (versão mais simplificada e leve)
 FROM node:alpine
 
@@ -12,11 +11,8 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN apk add git bash sudo mysql-client
-## Executa npm install para adicionar as dependências e criar a pasta node_modules
-RUN npm install
-RUN node -v
 
-## Copia tudo que está no diretório onde o arquivo Dockerfile está 
+## Copia tudo que está no diretório onde o arquivo Dockerfile está
 ## para dentro da pasta /usr/app do container
 ## Vamos ignorar a node_modules por isso criaremos um .dockerignore
 COPY . .
@@ -26,4 +22,4 @@ EXPOSE 80
 
 ## Não se repete no Dockerfile
 ## Executa o comando npm start para iniciar o script que está no package.json
-CMD npx prisma generate
+CMD npm install

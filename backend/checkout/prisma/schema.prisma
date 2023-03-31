@@ -6,11 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model OrderItem {
+model order_item {
   id        String @id @default(uuid())
   orderId   String
   productId String
@@ -18,22 +18,22 @@ model OrderItem {
   total     Int
 }
 
-model Order {
+model order {
   id         String  @id @default(uuid())
-  code       String
+  code       String  @unique
   customerId String
   freightId  String?
   couponId   String?
   total      Int
 
-  coupon Coupon? @relation(fields: [couponId], references: [id])
+  coupon coupon? @relation(fields: [couponId], references: [id])
 }
 
-model Coupon {
+model coupon {
   id          String   @id @default(uuid())
   code        String
   percentage  Int
   expire_date DateTime
 
-  order Order[]
+  order order[]
 }

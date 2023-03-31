@@ -10,6 +10,9 @@ build:
 up:
 	docker-compose up -d
 
+watch:
+	WATCH_FILES=1 docker-compose up -d
+
 down:
 	docker-compose down
 
@@ -29,6 +32,9 @@ login:
 
 setup:
 	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash -c "npm run setup"
-	
+
+migrate:
+	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash -c "npx prisma migrate dev --name init"
+
 test:
 	docker-compose run --rm -w /app ${APPLICATION_NAME} /bin/bash -c "npm run test"

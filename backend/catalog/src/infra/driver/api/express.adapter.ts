@@ -1,5 +1,5 @@
 import express from 'express';
-import IHttpServer from './http-server';
+import IHttpServer from './http-server.interface';
 
 type Output = {
   data: object

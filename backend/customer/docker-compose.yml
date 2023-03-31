@@ -1,10 +1,18 @@
 version: "3" ## especifica a versão do docker-compose file
 
+networks:
+  shared-services:
+    external: true
+
 services: ## Define um serviço
   customer: ## nome do serviço
     build: . ## localização do dockerfile
     command: npm run dev ## comando a executar
+    environment:
+      - WATCH_FILES=${WATCH_FILES}
     ports:
       - "3000:80" ## redirecionamento de porta quando chegar alguma requisição na porta 3000 chama o container na porta 80
     volumes:
       - .:/app ## monitoro a pasta atual . e envio as alterações para /usr/app
+    networks:
+      - shared-services

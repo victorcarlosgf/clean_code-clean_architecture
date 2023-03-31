@@ -6,20 +6,20 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Freight {
-  id        String   @id @default(uuid())
-  distance  Int
-  volume    Int
-  density   Int
-  value     Int
-  createdAt DateTime @default(now())
+model freight {
+  id         String   @id @default(uuid())
+  distance   Int
+  volume     Int
+  density    Int
+  value      Int
+  created_at DateTime @default(now())
 }
 
-model Zipcode {
+model zipcode {
   code         String @id
   street       String
   neighborhood String

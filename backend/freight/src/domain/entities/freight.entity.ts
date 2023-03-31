@@ -1,11 +1,20 @@
 import Coordinates from "./coordinates.entity";
 
 export default class Freight {
-  constructor() { }
+  distance: number
+  value: number
+
+  constructor(
+    readonly volume: number,
+    readonly density: number
+  ) {
+    this.distance = 0;
+    this.value = 0;
+  }
 
   calculateValue(volume: number, density: number, distance: number = 1000) {
     const value = distance * volume * (density / 100);
-    return (value >= 10) ? Math.round(value * 100) / 100 : 10;
+    this.value = (value >= 10) ? Math.round(value * 100) / 100 : 10;
   }
 
   calculateDistance(from: Coordinates, to: Coordinates) {
@@ -19,6 +28,6 @@ export default class Freight {
     dist = Math.acos(dist);
     dist = (dist * 180) / Math.PI;
     dist = dist * 60 * 1.1515;
-    return dist * 1.609344; //convert miles to km
+    this.distance = dist * 1.609344; //convert miles to km
   }
 }

@@ -1,16 +1,16 @@
-import Zipcode from "../../../../../domain/entities/zipcode.entity";
 import IZipcodeRepository from "../../../../../domain/repository/zipcode.interface.rep";
+import Zipcode from "../../../../../domain/entities/zipcode.entity";
 import PrismaAdapter from "../prisma.adapter";
 
 export default class ZipcodeDBRepository implements IZipcodeRepository {
-  connection: PrismaAdapter;
+  public connection: PrismaAdapter;
 
   constructor() {
     this.connection = new PrismaAdapter();
   }
 
-  async save(zipcode: Zipcode): Promise<any> {
-    return this.connection.prisma.zipcode.create({
+  async save(zipcode: Zipcode): Promise<Zipcode> {
+    const zipcodeCreated = await this.connection.prisma.zipcode.create({
       data: {
         code: zipcode.code,
         street: zipcode.street,
@@ -19,25 +19,29 @@ export default class ZipcodeDBRepository implements IZipcodeRepository {
         long: zipcode.long
       }
     })
+
+    return this.toEntity(zipcodeCreated);
   }
 
-  async findByCode(zipcodeCode: string): Promise<any> {
-    const productfound = await this.connection.prisma.zipcode.findFirst(
+  async findByCode(zipcodeCode: string): Promise<Zipcode> {
+    const zipcodeFound = await this.connection.prisma.zipcode.findFirst(
       {
         where: {
           code: zipcodeCode
-        },
-        orderBy: {
-          id: "desc"
         }
       }
     )
-    console.log(this.toEntity(productfound))
-    return productfound;
+
+    return this.toEntity(zipcodeFound);
   }
 
-  private toEntity(model: any): any {
-    console.log('MODELLL');
-    console.log(model);
+  private toEntity(model: any): Zipcode {
+    return new Zipcode(
+      model.code,
+      model.street,
+      model.neighborhood,
+      model.lat,
+      model.long
+    )
   }
 }

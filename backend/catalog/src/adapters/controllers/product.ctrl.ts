@@ -1,4 +1,4 @@
-import IHttpServer from '../../infra/driver/api/http-server';
+import IHttpServer from '../../infra/driver/api/http-server.interface';
 import ICreateProduct from '../../application/use-cases/product/create-product/create-product.interface';
 import {
   CreateProductDimensionInput,

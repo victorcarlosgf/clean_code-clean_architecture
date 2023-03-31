@@ -1,4 +1,3 @@
-## Comando obrigatório
 ## Baixa a imagem do node com versão alpine (versão mais simplificada e leve)
 FROM node:alpine
 
@@ -16,12 +15,10 @@ RUN apk add git bash sudo mysql-client
 RUN npm install
 RUN node -v
 
-## Copia tudo que está no diretório onde o arquivo Dockerfile está 
+## Copia tudo que está no diretório onde o arquivo Dockerfile está
 ## para dentro da pasta /usr/app do container
 ## Vamos ignorar a node_modules por isso criaremos um .dockerignore
 COPY . .
-
-RUN npm i -D prisma
 
 ## Container ficará ouvindo os acessos na porta 80
 EXPOSE 80

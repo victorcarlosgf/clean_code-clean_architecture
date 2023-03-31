@@ -4,3 +4,5 @@
 # lint-staged
 eslint --ext src --fix
 tsc --noEmit
+eslint --ext src --fix
+eslint --ext src --fix

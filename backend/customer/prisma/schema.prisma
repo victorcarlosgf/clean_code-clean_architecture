@@ -2,19 +2,18 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id        String   @id @default(uuid())
-  name      String
-  document  String
-  email     String
-  createdAt DateTime @default(now())
+model customer {
+  id         String   @id @default(uuid())
+  name       String
+  document   String   @unique
+  email      String
+  created_at DateTime @default(now())
 }

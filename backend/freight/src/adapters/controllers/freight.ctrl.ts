@@ -16,7 +16,12 @@ export default class FreightController {
         density: body.density
       }
 
-      return calculateFreight.execute(calculateFreightInput);
+      const response = await calculateFreight.execute(calculateFreightInput);
+
+      return {
+        data: response,
+        status: 200
+      }
     });
   }
 }
