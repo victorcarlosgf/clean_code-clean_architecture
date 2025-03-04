@@ -5,12 +5,26 @@ networks:
     external: true
 
 services:
-  mysql-db:
+  mysql-8.0:
     image: mysql:8.0
-    container_name: mysql-db
     ports:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - "/home/vagrant/services/data/mysql-8.0:/var/lib/mysql"
+      - "/home/vagrant/services/config/mysql-8.0:/etc/mysql/conf.d"
+    networks:
+      - shared-services
+
+  redis-6.0:
+    image: redis:6.0
+    command: redis-server
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - "/home/vagrant/services/data/redis-6.0/redis-data:/var/lib/redis"
+      - "/home/vagrant/services/data/redis-6.0/redis.conf:/usr/local/etc/redis/redis.conf"
     networks:
       - shared-services
